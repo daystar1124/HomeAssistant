@@ -1,0 +1,22 @@
+alias: Prenatal - Tag
+description: ""
+trigger:
+  - platform: tag
+    tag_id: 59319033-7316-4e95-a359-768e71fc99f8
+condition: []
+action:
+    #sets the boolean to true/on. Will cause the reminder to not trigger at noon
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.prenatal
+    # NOTE: This will also reset the persistent notification if one is already on the device 
+  - service: notify.notify
+    data:
+      message: clear_notification
+      data:
+        tag: prenatal_persistent
+        priority: high
+        ttl: 0
+        sticky: false
+mode: single
