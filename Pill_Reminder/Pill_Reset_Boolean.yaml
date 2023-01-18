@@ -1,3 +1,5 @@
+#Runs at 12:05 AM and resets the boolean, I'm sure there is a better way but this is the way I am resetting the boolean for now
+
 alias: Pill - Reset Boolean
 description: ""
 trigger:
