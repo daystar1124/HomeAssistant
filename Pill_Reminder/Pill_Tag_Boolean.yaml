@@ -1,4 +1,4 @@
-alias: Prenatal - Tag
+alias: Pill - Tag
 description: ""
 trigger:
   - platform: tag
@@ -9,13 +9,13 @@ action:
   - service: input_boolean.turn_on
     data: {}
     target:
-      entity_id: input_boolean.prenatal
+      entity_id: input_boolean.pill
     # NOTE: This will also reset the persistent notification if one is already on the device 
   - service: notify.notify
     data:
       message: clear_notification
       data:
-        tag: prenatal_persistent
+        tag: pill_persistent
         priority: high
         ttl: 0
         sticky: false
