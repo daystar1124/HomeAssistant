@@ -12,6 +12,7 @@ description: ""
 #Trigger on NFC tag scan requieres companion app
 trigger:
   - platform: tag
+    #change the tag ID.. It should let you with the UI or find the tag_id from events (developer tools, scan tag, record ID)
     tag_id: XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX
 condition: []
 #delay 30 minutes... If on average you washer takes longer, you can extend this delay
