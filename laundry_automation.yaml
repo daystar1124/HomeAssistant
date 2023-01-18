@@ -1,3 +1,12 @@
+#############################################################################################################################
+## Automation Title - Laundry: Washer Reminder
+## Use Case - Use this automation to send a reminder after an NFC tap to all devices in notify
+## This automation will wait 30 minutes and send the actionable notification. Hitting the button "Flipped Laundry"
+## will clear the notification for all devices automatically. This should work on iPhone and Android but of course requires
+## the home assistant companion app.
+#############################################################################################################################
+
+
 alias: "Laundry: Washer Reminder"
 description: ""
 trigger:
