@@ -1,0 +1,29 @@
+alias: "Laundry: Washer Reminder"
+description: ""
+trigger:
+  - platform: tag
+    tag_id: XXXXX-XXXXXX-XXXXXX-XXXXXX
+condition: []
+action:
+  - service: notify.notify
+    data:
+      message: Flip over the tester
+      title: Laundry
+      data:
+        priority: high
+        tag: laundry_notification
+        actions:
+          - action: CLEAR_LAUNDRY
+            title: Flipped Laundry
+  - wait_for_trigger:
+      platform: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: CLEAR_LAUNDRY
+    continue_on_timeout: true
+  - service: notify.notify
+    data:
+      message: clear_notification
+      data:
+        tag: laundry_notification
+mode: single
