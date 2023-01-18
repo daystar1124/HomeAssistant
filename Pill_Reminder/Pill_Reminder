@@ -1,0 +1,49 @@
+#############################################################################################################################
+## Automation Title - Pill Reminder
+## Use Case - Use this automation to send a reminder to take a pill/pills
+## This automation will wait until noon and send the actionable notification reminder. Hitting "Took pill" resets the reminder/boolean
+## NOTE: A boolean is required. Settings > Devices and Services > Helper > Toggle. Create that and use it in these automations. 
+## NOTE: You can reset this with just the notification, but I opted to use an NFC tag and if its scanned for the day, it won't send a notification at noon
+## This should work on iPhone and Android but of course requires the home assistant companion app.
+#############################################################################################################################
+
+alias: Pill - Reminder
+description: ""
+trigger:
+  - platform: time
+    at: "12:00:00"
+condition:
+  - condition: state
+    entity_id: input_boolean.pill
+    state: "off"
+action:
+  - service: notify.notify
+    data:
+      message: Reminder to take your pill vitamin
+      title: Take your pill!
+      data:
+        persistent: true
+        tag: pill_persistent
+        sticky: true
+        priority: high
+        actions:
+          - action: RESET_pill
+            title: Took pill
+  - wait_for_trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: RESET_pill
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.pill
+  - service: notify.notify
+    data:
+      message: clear_notification
+      data:
+        tag: pill_persistent
+        priority: high
+        ttl: 0
+        sticky: false
+mode: single
