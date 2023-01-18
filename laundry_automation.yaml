@@ -1,35 +1,48 @@
 #############################################################################################################################
 ## Automation Title - Laundry: Washer Reminder
-## Use Case - Use this automation to send a reminder after an NFC tap to all devices in notify
+## Use Case - Use this automation to send a reminder after an NFC tap to all devices in notify.
+## NOTE: This could also be triggered with power monitoring, I may update and use that if I ever buy the hardware
 ## This automation will wait 30 minutes and send the actionable notification. Hitting the button "Flipped Laundry"
 ## will clear the notification for all devices automatically. This should work on iPhone and Android but of course requires
 ## the home assistant companion app.
 #############################################################################################################################
 
-
 alias: "Laundry: Washer Reminder"
 description: ""
+#Trigger on NFC tag scan requieres companion app
 trigger:
   - platform: tag
-    tag_id: XXXXX-XXXXXX-XXXXXX-XXXXXX
+    tag_id: XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX
 condition: []
+#delay 30 minutes... If on average you washer takes longer, you can extend this delay
 action:
+  - delay:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+    #send the notification.. I use notify.notify since that would send a notification to all devices by default  
   - service: notify.notify
     data:
       message: Flip over the tester
       title: Laundry
       data:
+        #I set priority here as if you don't, the message can be delayed by a few minutes. Not important but I am impatient 
         priority: high
         tag: laundry_notification
         actions:
+            #action name here must match what you put in the wait_for_trigger section
           - action: CLEAR_LAUNDRY
             title: Flipped Laundry
+    #this is what triggers the clear message for all other users in your HA instance.         
   - wait_for_trigger:
       platform: event
       event_type: mobile_app_notification_action
       event_data:
         action: CLEAR_LAUNDRY
     continue_on_timeout: true
+    #this notify message clear the TAG laundry_notification. 
+    #If you use notify for other things, it shouldn't clear those messages unless for some reason the TAG is the same
   - service: notify.notify
     data:
       message: clear_notification
